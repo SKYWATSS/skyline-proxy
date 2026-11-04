@@ -1,0 +1,17 @@
+services:
+  skyline:
+    build: .
+    ports: ["8080:8080"]
+    restart: unless-stopped
+    environment:
+      ACCESS_PASSWORD: ${ACCESS_PASSWORD:-}        # set to require a password
+      RATE_LIMIT: ${RATE_LIMIT:-600}               # requests / minute / IP
+      DAYDREAMX_URL: ${DAYDREAMX_URL:-}            # e.g. https://ddx.yourdomain.com/ (optional)
+    mem_limit: 512m
+  # Optional: DaydreamX as its own service/origin (experimental, see README)
+  daydreamx:
+    build: ./engines/daydreamx
+    ports: ["8081:8080"]
+    restart: unless-stopped
+    mem_limit: 512m
+    profiles: ["daydreamx"]

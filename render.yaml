@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: skyline
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: ACCESS_PASSWORD
+        sync: false

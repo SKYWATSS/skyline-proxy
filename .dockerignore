@@ -1,0 +1,5 @@
+node_modules
+engines/daydreamx/node_modules
+*.png
+*.zip
+.git

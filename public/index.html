@@ -1,0 +1,19 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="Skyline">
+<meta name="theme-color" content="#0b0f1c"><link rel="manifest" href="/manifest.json"><link rel="apple-touch-icon" href="/icon.svg"><link rel="icon" href="/icon.svg">
+<link rel="stylesheet" href="/style.css"><title>Skyline</title>
+<script>if((localStorage.sky_dark??(matchMedia('(prefers-color-scheme: dark)').matches?'1':'0'))==='1')document.documentElement.classList.add('dark')</script>
+</head><body>
+<div class="tabs" id="tabs"></div>
+<div class="nav"><button class="ib" id="back" aria-label="Back">‹</button><button class="ib" id="fwd" aria-label="Forward">›</button>
+<form class="omni" id="of"><input id="omni" placeholder="Search or enter address" autocapitalize="off" autocorrect="off" enterkeyhint="go"></form>
+<button class="ib" id="reload" aria-label="Reload">↻</button><select class="ib" id="eng" aria-label="Proxy engine" style="width:auto;padding:0 4px;font-size:12px"></select><button class="ib" id="star" aria-label="Bookmark">☆</button></div>
+<main id="main"><section class="home" id="home"><div class="brand">Skyline</div><div class="sub">Browse privately, from anywhere.</div>
+<form class="big" id="hf"><input id="hq" placeholder="Search the web or type a URL" autocapitalize="off" enterkeyhint="search"><button class="go">Go</button></form>
+<div class="grid" id="grid"></div></section></main>
+<nav class="dock"><button id="dHome"><b>⌂</b>Home</button><button id="dNew"><b>＋</b>New tab</button><button id="dBm"><b>★</b>Saved</button><button id="dHist"><b>◷</b>History</button><button id="dSet"><b>⚙</b>Settings</button></nav>
+<div class="panel" id="panel"></div><div class="toast" id="toast"></div>
+<script src="/baremux/index.js"></script><script src="/uv/uv.bundle.js"></script><script src="/uv/uv.config.js"></script><script src="/sj/scramjet.all.js"></script><script src="/app.js"></script>
+</body></html>
