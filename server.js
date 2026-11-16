@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import { uvPath } from '@titaniumnetwork-dev/ultraviolet';
 import { server as wisp, logging } from '@mercuryworkshop/wisp-js/server';
 import Unblocker from 'unblocker';
+import { tunnel, startTunnel } from './tunnel.js';
 const unblocker = new Unblocker({ prefix: '/unblocker/' });
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -31,6 +32,16 @@ const authed = req => !PASSWORD || (req.cookies?.skyline_auth && req.cookies.sky
   timingSafeEqual(Buffer.from(req.cookies.skyline_auth), Buffer.from(TOKEN)));
 
 app.get('/healthz', (_q, r) => r.send('ok'));
+// Current https URL (from the Cloudflare tunnel) so it can be found from the plain-http address.
+app.get('/tunnel-url', (_q, r) => r.json({ url: tunnel.url, status: tunnel.status }));
+// Plain-http visitors (direct IP:port) can't run service workers -> send them to the https tunnel.
+// Requests that came through Cloudflare carry cf-ray, so they are never redirected (no loop).
+app.use((req, res, next) => {
+  if (process.env.TUNNEL_REDIRECT !== '0' && tunnel.url && !req.headers['cf-ray'] && req.method === 'GET' &&
+      req.protocol === 'http' && !/^\/(healthz|tunnel-url|wisp\/)/.test(req.path))
+    return res.redirect(302, tunnel.url + req.originalUrl);
+  next();
+});
 app.get('/login', (_q, r) => r.sendFile(path.join(__dirname, 'public/login.html')));
 app.post('/login', rateLimit({ windowMs: 15 * 60_000, limit: 20 }), (req, res) => {
   if (PASSWORD && req.body.password === PASSWORD) {
@@ -63,4 +74,7 @@ server.on('upgrade', (req, socket, head) => {
   if (req.url.startsWith('/unblocker/')) return unblocker.onUpgrade(req, socket, head);
   socket.destroy();
 });
-server.listen(PORT, () => console.log(`Skyline Proxy on :${PORT}${PASSWORD ? ' (password on)' : ''}`));
+server.listen(PORT, () => {
+  console.log(`Skyline Proxy on :${PORT}${PASSWORD ? ' (password on)' : ''}`);
+  startTunnel(PORT, path.join(__dirname, '.cloudflared'));
+});

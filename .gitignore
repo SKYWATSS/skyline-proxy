@@ -2,3 +2,4 @@ node_modules/
 engines/daydreamx/
 preview*.png
 .env
+.cloudflared/

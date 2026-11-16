@@ -49,3 +49,12 @@ This project bundles AGPL-3.0 components, so the combined project is AGPL-3.0 (s
 If you let other people use it over a network, you must offer them the source (e.g. link the GitHub repo).
 GUST and DaydreamX are third-party projects; their licenses/attribution are kept unchanged. Local changes:
 `engines/daydreamx/index.js` (works without `.git`) and `engines/daydreamx/srv/router.js` (suggestion API crash fix), marked "Skyline patch".
+
+## HTTPS via Cloudflare tunnel (built in)
+Service-worker engines (Ultraviolet, Scramjet) only work on an https origin. On startup the server downloads
+`cloudflared` into `.cloudflared/` and opens a free Cloudflare quick tunnel. The https URL is printed in the
+console (`[tunnel] ===== HTTPS URL: ... =====`) and served at `/tunnel-url`. Plain-http visits to the direct
+IP:port are redirected to it. The quick-tunnel URL changes on every restart.
+
+Env vars: `TUNNEL=0` (disable), `TUNNEL_REDIRECT=0` (no http->https redirect), `CF_TUNNEL_TOKEN` (named tunnel
+with a stable hostname), `PUBLIC_URL` (the stable https URL when using a named tunnel), `CLOUDFLARED_BIN`.
